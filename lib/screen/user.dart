@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tubes_market_hewan/data/data.dart';
 import 'package:tubes_market_hewan/screen/change_image.dart';
+import 'package:tubes_market_hewan/screen/product_add.dart';
 import 'package:tubes_market_hewan/screen/show_image.dart';
 import 'package:tubes_market_hewan/screen/user_profil.dart';
 import 'package:tubes_market_hewan/style/color.dart';
@@ -56,11 +57,11 @@ class User extends StatelessWidget {
                     color: navy,
                   ),
                   const SizedBox(
-                    width: 5,
+                    width: 10,
                   ),
                   Text(
                     "Akun saya",
-                    style: text16_5navy,
+                    style: text16_6navy,
                   ),
                   const Spacer(),
                   (data?['role'] == "admin")
@@ -68,12 +69,11 @@ class User extends StatelessWidget {
                           onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const Center()
-                              )),
+                                  builder: (context) => const ProductAdd())),
                           child: const FaIcon(
-                            FontAwesomeIcons.userPen,
+                            FontAwesomeIcons.layerGroup,
                             size: 18,
-                            color: navy,
+                            color: yellow,
                           ),
                         )
                       : const SizedBox(),
@@ -81,7 +81,12 @@ class User extends StatelessWidget {
                     width: 20,
                   ),
                   InkWell(
-                    onTap: () => Navigator.push(context, CupertinoPageRoute(builder: (context) => UserProfil(username: data?['username']),)),
+                    onTap: () => Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) =>
+                              UserProfil(username: data?['username']),
+                        )),
                     child: const FaIcon(
                       FontAwesomeIcons.bars,
                       size: 20,
@@ -106,6 +111,9 @@ class User extends StatelessWidget {
                       Text(
                         data?['username'] ?? '',
                         style: text14_6navy,
+                      ),
+                      const SizedBox(
+                        height: 5,
                       ),
                       Text(truncateText(email.toString(), 20))
                     ],

@@ -15,17 +15,37 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          children: [
-            Text(
-              "ppppxxx",
-              style: text25_5navy,
-            ),
-            const Spacer(),
-            const FaIcon(FontAwesomeIcons.solidEnvelopeOpen, color: navy,),
-            const SizedBox(width: 15,),
-            const FaIcon(FontAwesomeIcons.bagShopping, color: navy,),
-          ],
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
+            children: [
+              FaIcon(
+                FontAwesomeIcons.dove,
+                size: 20,
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Text(
+                "Ichlick",
+                style: text25_5navy,
+              ),
+              const Spacer(),
+              const FaIcon(
+                FontAwesomeIcons.solidEnvelopeOpen,
+                size: 20,
+                color: navy,
+              ),
+              const SizedBox(
+                width: 15,
+              ),
+              const FaIcon(
+                FontAwesomeIcons.bagShopping,
+                size: 20,
+                color: navy,
+              ),
+            ],
+          ),
         ),
       ],
     );
