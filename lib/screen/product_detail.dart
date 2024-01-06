@@ -17,6 +17,9 @@ class ProductDetail extends StatefulWidget {
 }
 
 class _ProductDetailState extends State<ProductDetail> {
+  final db = FirebaseFirestore.instance;
+  final uid = FirebaseAuth.instance.currentUser?.uid;
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -69,15 +72,98 @@ class _ProductDetailState extends State<ProductDetail> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Rp ${widget.data.price}",
-                    style: text18_6navy,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Rp ${widget.data.price}",
+                        style: text18_6navy,
+                      ),
+                      StreamBuilder(
+                          // stream: db
+                          //     .collection("product")
+                          //     .doc(widget.data.id)
+                          //     .collection("fav")
+                          //     .where("id", isEqualTo: uid)
+                          //     .snapshots(),
+                          stream: db
+                              .collection("userData")
+                              .doc(uid)
+                              .collection("favProduct")
+                              .where("id", isEqualTo: widget.data.id)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            if (snapshot.hasError) {
+                              return const Center(
+                                child: Text("e"),
+                              );
+                            }
+                            var data = snapshot.data?.docs;
+                            print("masnukkk : ${data}");
+                            // print("masnukkk : ${data?[0]['id']}");
+                            return InkWell(
+                                onTap: () async {
+                                  if (data.isNotEmpty) {
+                                    // await db
+                                        // .collection("product")
+                                        // .doc(widget.data.id)
+                                        // .collection("fav")
+                                        // .doc(uid)
+                                        // .delete();
+
+                                    await db
+                                        .collection("userData")
+                                        .doc(uid)
+                                        .collection("favProduct")
+                                        .doc(widget.data.id)
+                                        .delete();
+                                  } else {
+                                    // await db
+                                    //     .collection("product")
+                                    //     .doc(widget.data.id)
+                                    //     .collection("fav")
+                                    //     .doc(uid)
+                                    //     .set({'id': uid});
+                                    print('aktif');
+                                    await db
+                                        .collection("userData")
+                                        .doc(uid)
+                                        .collection("favProduct")
+                                        .doc(widget.data.id)
+                                        .set({
+                                          'id' : widget.data.id,
+                                          'name': widget.data.name,
+                                          'image' : widget.data.image,
+                                          'price' : widget.data.price,
+                                          'stock' : widget.data.stock,
+                                          'desc' : widget.data.desc,
+                                        });
+
+                                  }
+                                  // Navigator.pop(context);
+                                },
+                                child: FaIcon(
+                                  data!.isNotEmpty
+                                      ? FontAwesomeIcons.solidHeart
+                                      : FontAwesomeIcons.heart,
+                                  size: 20,
+                                ));
+                          })
+                    ],
                   ),
                   Text(
                     widget.data.name,
                     style: text16_4navy,
                   ),
-                  const SizedBox(height: 10,),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Text(
                     widget.data.desc,
                     style: text16_4navy,
@@ -109,9 +195,10 @@ class _ProductDetailState extends State<ProductDetail> {
           Expanded(
             child: InkWell(
               onTap: () async {
-                final db = FirebaseFirestore.instance;
-                final uid = FirebaseAuth.instance.currentUser?.uid;
-                db.collection("product").doc(widget.data.id).collection("fav").doc(uid).set({});
+                // final db = FirebaseFirestore.instance;
+                // final uid = FirebaseAuth.instance.currentUser?.uid;
+                // await db.collection("product").doc(widget.data.id).collection("fav").doc(uid).set({});
+                // Navigator.pop(context);
               },
               child: Container(
                 height: 50,

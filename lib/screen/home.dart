@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tubes_market_hewan/screen/fav.dart';
 import 'package:tubes_market_hewan/screen/homepage.dart';
 import 'package:tubes_market_hewan/screen/product.dart';
 import 'package:tubes_market_hewan/screen/user.dart';
@@ -38,7 +39,7 @@ class _HomeState extends State<Home> {
           children: [
             Homepage(),
             Product(),
-            Center(),
+            Fav(),
             User(),
           ],
         ),
