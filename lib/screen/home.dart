@@ -55,8 +55,8 @@ class _HomeState extends State<Home> {
             label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.solidBell),
-            label: 'Notif',
+            icon: FaIcon(FontAwesomeIcons.solidHeart),
+            label: 'Fav',
           ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.userLarge),

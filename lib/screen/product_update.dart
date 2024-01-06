@@ -3,28 +3,31 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tubes_market_hewan/data/data.dart';
+import 'package:tubes_market_hewan/screen/home.dart';
 import 'package:tubes_market_hewan/style/color.dart';
 import 'package:tubes_market_hewan/style/custom_container.dart';
 import 'package:tubes_market_hewan/style/text.dart';
-import 'package:uuid/uuid.dart';
 
-class ProductAdd extends StatefulWidget {
-  const ProductAdd({super.key});
+class ProductUpdate extends StatefulWidget {
+  final ProductData data;
+  ProductUpdate({super.key, required this.data});
 
   @override
-  State<ProductAdd> createState() => _ProductAddState();
+  State<ProductUpdate> createState() => _ProductUpdateState();
 }
 
-class _ProductAddState extends State<ProductAdd> {
+class _ProductUpdateState extends State<ProductUpdate> {
   File? _image;
   final picker = ImagePicker();
   final uid = FirebaseAuth.instance.currentUser?.uid;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
-  final TextEditingController desckController = TextEditingController();
+  final TextEditingController descController = TextEditingController();
   final TextEditingController stockController = TextEditingController();
 
   Future getImage() async {
@@ -58,6 +61,10 @@ class _ProductAddState extends State<ProductAdd> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     bool isKeyboardVisible = mediaQuery.viewInsets.bottom > 0;
+    nameController.text = widget.data.name;
+    priceController.text = widget.data.price;
+    descController.text = widget.data.desc;
+    stockController.text = widget.data.stock;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -79,8 +86,16 @@ class _ProductAddState extends State<ProductAdd> {
                     )
                   : InkWell(
                       onTap: getImage,
-                      child: const Text('No image, click to select image')),
-              // const SizedBox(height: 20),
+                      child: Image.network(
+                        widget.data.image,
+                        height: isKeyboardVisible ? 50 : 200,
+                        width: isKeyboardVisible
+                            ? mediaQuery.size.width / 5
+                            : mediaQuery.size.width / 1.2,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+              // SizedBox(height: isKeyboardVisible ? 0:20),
               // ElevatedButton(
               //   onPressed: getImage,
               //   child: const Text('Select Image'),
@@ -167,7 +182,7 @@ class _ProductAddState extends State<ProductAdd> {
                   maxLines: 5,
                   minLines: 1,
                   keyboardType: TextInputType.multiline,
-                  controller: desckController,
+                  controller: descController,
                   style: text14_6navy,
                   decoration: InputDecoration(
                     hintText: 'Description',
@@ -187,18 +202,28 @@ class _ProductAddState extends State<ProductAdd> {
               const SizedBox(height: 20),
               InkWell(
                 onTap: () async {
-                  String productID = const Uuid().v4();
+                  // String productID = const Uuid().v4();
                   if (_image != null) {
-                    String url = await uploadImageToFirebase(productID);
+                    String url = await uploadImageToFirebase(widget.data.id);
                     final db = FirebaseFirestore.instance;
-                    db.collection("product").doc(productID).set({
+                    db.collection("product").doc(widget.data.id).set({
                       "image": url,
                       "name": nameController.text,
                       "stock": stockController.text,
-                      "desc": desckController.text,
+                      "desc": descController.text,
                       "price": priceController.text
-                    });
-                    Navigator.pop(context);
+                    }, SetOptions(merge: true));
+                    Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => const Home(),));
+                  } else {
+                    final db = FirebaseFirestore.instance;
+                    db.collection("product").doc(widget.data.id).set({
+                      "name": nameController.text,
+                      "stock": stockController.text,
+                      "desc": descController.text,
+                      "price": priceController.text
+                    }, SetOptions(merge: true));
+                    Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => const Home(),));
+                    // Navigator.pop(context);
                   }
                 },
                 child: Container(

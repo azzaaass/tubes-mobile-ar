@@ -26,6 +26,10 @@ TextStyle text14_6white = GoogleFonts.roboto(
     textStyle: const TextStyle(
         fontSize: 14, fontWeight: FontWeight.w600, color: white));
 
+TextStyle text14_4navy = GoogleFonts.roboto(
+    textStyle: const TextStyle(
+        fontSize: 14, fontWeight: FontWeight.w400, color: navy));
+
 TextStyle text14_6navy = GoogleFonts.roboto(
     textStyle: const TextStyle(
         fontSize: 14, fontWeight: FontWeight.w600, color: navy));

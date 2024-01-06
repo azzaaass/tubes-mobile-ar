@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tubes_market_hewan/data/data.dart';
 import 'package:tubes_market_hewan/screen/product_detail.dart';
@@ -20,96 +19,93 @@ class _FavState extends State<Fav> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
-    return StreamBuilder(
-        stream: db
-            .collection("userData")
-            .doc(uid)
-            .collection("favProduct")
-            
-            // .where("id", isEqualTo: uid)
-            // .doc().
-            // .collection("fav")
-            // .where("id", isEqualTo: uid)
-
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text("Error"),
-            );
-          }
-          var data = snapshot.data!.docs;
-          // print("manuok : ${data[0].}");
-          return GridView.builder(
-            itemCount: data.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisExtent: 250.0,
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-            ),
-            itemBuilder: (context, index) {
-              // return Text(data[index]['name']);
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductDetail(
-                            data: ProductData(
-                                id: data[index].id,
-                                image: data[index]['image'],
-                                name: data[index]['name'],
-                                price: data[index]['price'],
-                                desc: data[index]['desc'],
-                                stock: data[index]['stock'])),
-                      ));
-                },
-                child: Container(
-                  decoration: cardContainer,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 150,
-                        width: mediaQuery.size.width / 2,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: NetworkImage(data[index]['image']),
-                              fit: BoxFit.cover),
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: StreamBuilder(
+          stream: db
+              .collection("userData")
+              .doc(uid)
+              .collection("favProduct")
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text("Error"),
+              );
+            }
+            var data = snapshot.data!.docs;
+            // print("manuok : ${data[0].}");
+            return GridView.builder(
+              itemCount: data.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisExtent: 230.0,
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+              ),
+              itemBuilder: (context, index) {
+                // return Text(data[index]['name']);
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductDetail(
+                              data: ProductData(
+                                  id: data[index].id,
+                                  image: data[index]['image'],
+                                  name: data[index]['name'],
+                                  price: data[index]['price'],
+                                  desc: data[index]['desc'],
+                                  stock: data[index]['stock'])),
+                        ));
+                  },
+                  child: Container(
+                    decoration: cardContainer,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 150,
+                          width: mediaQuery.size.width / 2,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: NetworkImage(data[index]['image']),
+                                fit: BoxFit.cover),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              data[index]['name'],
-                              style: text12_6navy,
-                            ),
-                            Text(
-                              "Rp ${data[index]['price']}",
-                              style: text14_6navy,
-                            ),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                data[index]['name'],
+                                style: text12_6navy,
+                              ),
+                              Text(
+                                "Rp ${data[index]['price']}",
+                                style: text14_6navy,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          );
-        });
+                );
+              },
+            );
+          }),
+    );
   }
 }

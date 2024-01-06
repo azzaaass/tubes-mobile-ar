@@ -43,7 +43,7 @@ class ShowImageState extends State<ShowImage> {
           return const CircleAvatar(
             radius: 40.0,
             backgroundColor: navy,
-            child: const CircularProgressIndicator(color: Colors.white),
+            child: CircularProgressIndicator(color: Colors.white),
           );
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
