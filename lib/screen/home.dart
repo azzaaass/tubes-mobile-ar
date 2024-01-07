@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tubes_market_hewan/screen/fav.dart';
 import 'package:tubes_market_hewan/screen/homepage.dart';
+import 'package:tubes_market_hewan/screen/product.dart';
 import 'package:tubes_market_hewan/screen/user.dart';
 import 'package:tubes_market_hewan/style/color.dart';
 
@@ -13,12 +15,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 3;
+  int _selectedIndex = 0;
   final PageController controller = PageController();
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _selectedIndex = 1;
       controller.animateToPage(index,
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeOutQuad);
@@ -36,8 +38,8 @@ class _HomeState extends State<Home> {
           }),
           children: [
             Homepage(),
-            Placeholder(),
-            Center(),
+            Product(),
+            Fav(),
             User(),
           ],
         ),
@@ -53,8 +55,8 @@ class _HomeState extends State<Home> {
             label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.solidBell),
-            label: 'Notif',
+            icon: FaIcon(FontAwesomeIcons.solidHeart),
+            label: 'Fav',
           ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.userLarge),

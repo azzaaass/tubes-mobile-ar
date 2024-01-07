@@ -60,7 +60,7 @@ class _LoginState extends State<Login> {
                     controller: emailController,
                     style: text14_6navy,
                     decoration: InputDecoration(
-                      hintText: 'Email here',
+                      hintText: 'Email',
                       border: InputBorder.none,
                       prefixIcon: FaIcon(
                         FontAwesomeIcons.solidEnvelope,
@@ -87,7 +87,7 @@ class _LoginState extends State<Login> {
                     style: text14_6navy,
                     obscureText: !isVisible,
                     decoration: InputDecoration(
-                      hintText: 'Password here',
+                      hintText: 'Password',
                       border: InputBorder.none,
                       prefixIcon: FaIcon(
                         FontAwesomeIcons.key,

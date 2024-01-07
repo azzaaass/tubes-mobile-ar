@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tubes_market_hewan/auth/login.dart';
 import 'package:tubes_market_hewan/data/data.dart';
 import 'package:tubes_market_hewan/screen/change_image.dart';
+import 'package:tubes_market_hewan/screen/product_add.dart';
 import 'package:tubes_market_hewan/screen/show_image.dart';
 import 'package:tubes_market_hewan/screen/user_profil.dart';
 import 'package:tubes_market_hewan/style/color.dart';
@@ -13,6 +15,7 @@ import 'package:tubes_market_hewan/style/text.dart';
 class User extends StatelessWidget {
   User({super.key});
   final GlobalKey<ShowImageState> childKey = GlobalKey<ShowImageState>();
+  final auth = FirebaseAuth.instance;
   final uid = FirebaseAuth.instance.currentUser?.uid;
   final email = FirebaseAuth.instance.currentUser?.email;
   final db = FirebaseFirestore.instance;
@@ -56,11 +59,11 @@ class User extends StatelessWidget {
                     color: navy,
                   ),
                   const SizedBox(
-                    width: 5,
+                    width: 10,
                   ),
                   Text(
                     "Akun saya",
-                    style: text16_5navy,
+                    style: text16_6navy,
                   ),
                   const Spacer(),
                   (data?['role'] == "admin")
@@ -68,12 +71,11 @@ class User extends StatelessWidget {
                           onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const Center()
-                              )),
+                                  builder: (context) => const ProductAdd())),
                           child: const FaIcon(
-                            FontAwesomeIcons.userPen,
+                            FontAwesomeIcons.layerGroup,
                             size: 18,
-                            color: navy,
+                            color: yellow,
                           ),
                         )
                       : const SizedBox(),
@@ -81,7 +83,12 @@ class User extends StatelessWidget {
                     width: 20,
                   ),
                   InkWell(
-                    onTap: () => Navigator.push(context, CupertinoPageRoute(builder: (context) => UserProfil(username: data?['username']),)),
+                    onTap: () => Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) =>
+                              UserProfil(username: data?['username']),
+                        )),
                     child: const FaIcon(
                       FontAwesomeIcons.bars,
                       size: 20,
@@ -107,6 +114,9 @@ class User extends StatelessWidget {
                         data?['username'] ?? '',
                         style: text14_6navy,
                       ),
+                      const SizedBox(
+                        height: 5,
+                      ),
                       Text(truncateText(email.toString(), 20))
                     ],
                   ),
@@ -130,24 +140,32 @@ class User extends StatelessWidget {
                 child: ListView.builder(
               itemCount: setting.length,
               itemBuilder: (context, index) {
-                return Container(
-                  margin:
-                      const EdgeInsets.only(bottom: 20, right: 20, left: 20),
-                  child: Row(
-                    children: [
-                      FaIcon(
-                        setting[index].icon,
-                        size: 25,
-                        color: navy.withOpacity(0.6),
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        setting[index].title,
-                        style: text16_4navy,
-                      )
-                    ],
+                return InkWell(
+                  onTap: () {
+                    if (index == 5) {
+                      auth.signOut();
+                      Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => Login(),));
+                    }
+                  },
+                  child: Container(
+                    margin:
+                        const EdgeInsets.only(bottom: 20, right: 20, left: 20),
+                    child: Row(
+                      children: [
+                        FaIcon(
+                          setting[index].icon,
+                          size: 23,
+                          color: navy,
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Text(
+                          setting[index].title,
+                          style: text16_4navy,
+                        )
+                      ],
+                    ),
                   ),
                 );
               },
